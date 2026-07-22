@@ -14,9 +14,13 @@ type ViewsController struct {
 }
 
 func NewViewsController() *ViewsController {
+	base        := []string{"templates/Base.html"}
 	partials, _ := filepath.Glob("./templates/partials/*.html")
+
+	htmlFiles   := append(base, partials...)
+
 	pages, _    := filepath.Glob("./templates/pages/*.html")
-	htmlFiles   := append(partials, pages...)
+	htmlFiles    = append(partials, pages...)
 
 	vc := &ViewsController{
 		Router:    chi.NewRouter(),
