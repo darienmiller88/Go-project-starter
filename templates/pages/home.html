@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
-    </head>
-    <body>
-        <h1>HTMX + Go Stack</h1>
-        <button>Click me</button>
-        <!-- Increment goes here -->
-    </body>
-</html>
+{{ define "title" }}Home{{ end }}
+
+{{ define "css" }}
+    <link rel="stylesheet" href="../../static/home.css"/>
+{{ end }}
+
+{{ define "content" }}
+    <h1>Home</h1>
+    <button>
+        Click me
+        <!-- Htmx counter will go here -->
+        <span></span>
+    </button>
+
+{{ end }}
