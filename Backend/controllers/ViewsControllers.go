@@ -20,7 +20,7 @@ func NewViewsController() *ViewsController {
 	htmlFiles   := append(base, partials...)
 
 	pages, _    := filepath.Glob("./templates/pages/*.html")
-	htmlFiles    = append(partials, pages...)
+	htmlFiles    = append(htmlFiles, pages...)
 
 	vc := &ViewsController{
 		Router:    chi.NewRouter(),
@@ -38,7 +38,7 @@ func (v *ViewsController) registerViewRoutes() {
 
 
 func (v *ViewsController) homePage(response http.ResponseWriter, request *http.Request) {
-	err := v.templates.ExecuteTemplate(response, "home.html", nil)
+	err := v.templates.ExecuteTemplate(response, "home", nil)
 
 	if err != nil {
 		http.Error(response, "Error rendering template", http.StatusInternalServerError)

@@ -1,7 +1,7 @@
 {{ define "title" }}Home{{ end }}
 
 {{ define "css" }}
-    <link rel="stylesheet" href="../../static/css/home.css"/>
+    <link rel="stylesheet" href="/static/css/home.css"/>
 {{ end }}
 
 {{ define "content" }}
@@ -11,5 +11,9 @@
         <!-- Htmx counter will go here -->
         <span></span>
     </button>
+{{ end }}
 
+<!-- "Inherits" the base.html -->
+{{ define "home" }}
+    {{ template "base" . }}
 {{ end }}
