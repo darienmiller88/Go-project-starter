@@ -1,30 +1,33 @@
 {{ define "navbar" }}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+    <nav x-data="{ mobileMenuOpen: false }">
+        <div class="nav-left-brand">
+            <img src="static/img/logo.png" alt="logo">
+            <div class="nav-title">ScheduleFlow</div>
+        </div>
+
+        <button class="menu-toggle" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Navigation">
+            <i class="bi bi-list"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-            </ul>
+        <div class="user-info desktop-only">
+            <div class="nav-item acronym">JD</div>
+            <div class="nav-item username">John Doe</div>
+            <div class="nav-item settings-icon">
+                <i class="bi bi-gear"></i>
+            </div> 
+            <div class="nav-item sign-out-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+        </div>
+
+        <div class="mobile-menu" x-show="mobileMenuOpen" x-transition @click.outside="mobileMenuOpen = false" x-cloak>
+            <div class="mobile-user-profile">
+                <div class="acronym">JD</div>
+                <div class="username">John Doe</div>
+            </div>
+            <hr>
+            <a href="/settings" class="mobile-nav-item"><i class="bi bi-gear"></i> Settings</a>
+            <button hx-post="/logout" class="mobile-nav-item"><i class="bi bi-box-arrow-right"></i> Sign Out</button>
         </div>
     </nav>
 {{ end }}
