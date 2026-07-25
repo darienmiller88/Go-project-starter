@@ -5,12 +5,20 @@
 {{ end }}
 
 {{ define "content" }}
-    <h1>Home</h1>
-    <button>
-        Click me
+    <div class="title">
+        <img src="/static/img/go-logo.png" alt="go-logo">
+        <span>+</span>
+        <img src="/static/img/Htmx_Logo.png" alt="htmx-logo">
+    </div>
+    <h4>Users</h4>
+    <button hx-post="/add-user" hx-target="#users" hx-swap="beforeend">
+        Add
         <!-- Htmx counter will go here -->
         <span></span>
     </button>
+    <div id="users" class="users">
+
+    </div>
 {{ end }}
 
 <!-- "Inherits" the base.html -->
