@@ -2,11 +2,11 @@ package constants
 
 const (
 	
-	GetUser string = ""
+	GetUsers string = "SELECT * FROM users"
 
-	DeleteUser string = ""
+	DeleteUser string = "DELETE FROM users WHERE id = $1"
 
-	AddUser string = ""
+	AddUser string = "INSERT INTO users (name) VALUES ($1)"
 
 	UpdateUser string = ""
 )

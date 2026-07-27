@@ -36,7 +36,6 @@ func (v *ViewsController) registerViewRoutes() {
 	v.Router.Get("/home", v.homePage)
 }
 
-
 func (v *ViewsController) homePage(response http.ResponseWriter, request *http.Request) {
 	err := v.templates.ExecuteTemplate(response, "home", nil)
 

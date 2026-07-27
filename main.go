@@ -17,7 +17,7 @@ func main(){
 	database.ConnectToSQL()
 
 	router := chi.NewRouter()
-	indexController := controllers.NewIndexController()
+	indexController := controllers.NewIndexController(database.DB)
 
 	router.Mount("/", indexController.Router)
 	

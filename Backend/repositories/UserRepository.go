@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"GoProjectStarter/Backend/models"
+	"GoProjectStarter/Backend/constants"
 	"GoProjectStarter/utils"
 	"net/http"
 
@@ -9,10 +10,10 @@ import (
 )
 
 type UserRepository interface {
-	AddUser()    models.Result[models.User]
-	DeleteUser() models.Result[bool]
-	UpdateUser() models.Result[bool]
-	GetUser()    models.Result[models.User]
+	AddUserDB(name string) models.Result[models.User]
+	DeleteUserDB(id int)   models.Result[bool]
+	UpdateUserDB()         models.Result[bool]
+	GetUsersDB()           models.Result[[]models.User]
 }
 
 //Feel free to change this to mongoDB
@@ -21,28 +22,46 @@ type userRepository struct {
 }
 
 func NewUserRepository(db *sqlx.DB) UserRepository {
-	return userRepository{
+	return &userRepository{
 		db: db,
 	}
 }
 
 // AddUser implements [UserRepository].
-func (u userRepository) AddUser() models.Result[models.User]{
+func (u *userRepository) AddUserDB(name string) models.Result[models.User]{
+	_, err := u.db.Exec(constants.AddUser, name)
+
+	if err != nil{
+		return utils.GetResult(err, http.StatusInternalServerError, models.User{})	
+	}
+		
 	return utils.GetResult(nil, http.StatusOK, models.User{})
 }
 
 // DeleteUser implements [UserRepository].
-func (u userRepository) DeleteUser() models.Result[bool]{
+func (u *userRepository) DeleteUserDB(id int) models.Result[bool]{
+	_, err := u.db.Exec(constants.DeleteUser, id)
+
+	if err != nil{
+		return utils.GetResult(err, http.StatusInternalServerError, false)	
+	}
+
 	return utils.GetResult(nil, http.StatusOK, true)
 }
 
 // GetUser implements [UserRepository].
-func (u userRepository) GetUser() models.Result[models.User]{
-	return utils.GetResult(nil, http.StatusOK, models.User{})
+func (u *userRepository) GetUsersDB() models.Result[[]models.User]{
+	users := []models.User{}
+
+	if err := u.db.Select(&users, constants.GetUsers); err != nil {
+		return utils.GetResult(err, int(http.StatusInternalServerError), []models.User{})
+	}
+
+	return utils.GetResult(nil, http.StatusOK, users)
 }
 
 // UpdateUser implements [UserRepository].
-func (u userRepository) UpdateUser() models.Result[bool]{
+func (u *userRepository) UpdateUserDB() models.Result[bool]{
 	return utils.GetResult(nil, http.StatusOK, true)
 }
 
