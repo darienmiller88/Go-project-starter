@@ -4,6 +4,8 @@ body{
     display: grid;
     grid-template-rows: auto 1fr auto;
     min-height: 100dvh;
+
+    background-color: rgb(190, 185, 191);
 }
 
 /* Base Layout Config */

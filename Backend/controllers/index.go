@@ -26,7 +26,7 @@ func NewIndexController(db *sqlx.DB) *IndexController {
 
 // registerRoutes sets up the routes for the IndexController by mounting all sub-routes in controllers.
 func (c *IndexController) registerRoutes() {
-	vc := NewViewsController()
+	vc := NewViewsController(services.NewUserService(repositories.NewUserRepository(c.db)))
 	uc := NewUserController(services.NewUserService(repositories.NewUserRepository(c.db)))
 
 	c.Router.Mount("/", vc.Router)

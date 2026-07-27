@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"GoProjectStarter/Backend/services"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -9,22 +10,24 @@ import (
 )
 
 type ViewsController struct {
-	Router    *chi.Mux
-	templates *template.Template
+	Router      *chi.Mux
+	templates   *template.Template
+	userService services.UserService
 }
 
-func NewViewsController() *ViewsController {
-	base        := []string{"templates/Base.html"}
+func NewViewsController(userService services.UserService) *ViewsController {
+	base := []string{"templates/Base.html"}
 	partials, _ := filepath.Glob("./templates/partials/*.html")
 
-	htmlFiles   := append(base, partials...)
+	htmlFiles := append(base, partials...)
 
-	pages, _    := filepath.Glob("./templates/pages/*.html")
-	htmlFiles    = append(htmlFiles, pages...)
+	pages, _ := filepath.Glob("./templates/pages/*.html")
+	htmlFiles = append(htmlFiles, pages...)
 
 	vc := &ViewsController{
-		Router:    chi.NewRouter(),
-		templates: template.Must(template.ParseFiles(htmlFiles...)),
+		Router:      chi.NewRouter(),
+		templates:   template.Must(template.ParseFiles(htmlFiles...)),
+		userService: userService,
 	}
 
 	vc.registerViewRoutes()
@@ -37,7 +40,19 @@ func (v *ViewsController) registerViewRoutes() {
 }
 
 func (v *ViewsController) homePage(response http.ResponseWriter, request *http.Request) {
-	err := v.templates.ExecuteTemplate(response, "home", nil)
+	usersResult := v.userService.GetUsers()
+
+	if usersResult.Err != nil {
+		http.Error(response, usersResult.Err.Error(), usersResult.StatusCode)
+		return
+	}
+
+	users := usersResult.ResultData
+	data := map[string]any{
+		"Users": users,
+	}
+
+	err := v.templates.ExecuteTemplate(response, "home", data)
 
 	if err != nil {
 		http.Error(response, "Error rendering template", http.StatusInternalServerError)

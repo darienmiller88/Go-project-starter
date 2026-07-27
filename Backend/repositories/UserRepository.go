@@ -29,13 +29,17 @@ func NewUserRepository(db *sqlx.DB) UserRepository {
 
 // AddUser implements [UserRepository].
 func (u *userRepository) AddUserDB(name string) models.Result[models.User]{
-	_, err := u.db.Exec(constants.AddUser, name)
+	id  := 0
+	err := u.db.QueryRow(constants.AddUser, name).Scan(&id)
 
 	if err != nil{
 		return utils.GetResult(err, http.StatusInternalServerError, models.User{})	
 	}
 		
-	return utils.GetResult(nil, http.StatusOK, models.User{})
+	return utils.GetResult(nil, http.StatusOK, models.User{
+		ID: id,
+		Name: name,
+	})
 }
 
 // DeleteUser implements [UserRepository].

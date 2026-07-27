@@ -23,8 +23,15 @@ h4 {
     text-align: center;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1f2937;
+    font-style: italic;
+    color: #111827;
     margin: 1rem 0 1.25rem;
+}
+
+.no-users{
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* Input & Button Container */

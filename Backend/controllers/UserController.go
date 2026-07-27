@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"GoProjectStarter/Backend/services"
+	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -9,15 +11,17 @@ import (
 
 type UserController struct {
 	Router     *chi.Mux
+	templates  *template.Template
 	userService services.UserService
 }
 
 func NewUserController(userService services.UserService) *UserController {
-	
+
 	uc := &UserController{
 		Router:      chi.NewRouter(),
 		userService: userService,
-	}
+		templates:   template.Must(template.ParseGlob("./templates/partials/*.html")),
+	} 
 
 	uc.registerViewRoutes()
 
@@ -25,9 +29,29 @@ func NewUserController(userService services.UserService) *UserController {
 }
 
 func (u *UserController) registerViewRoutes() {
-	u.Router.Get("/add-user", u.addUser)
+	u.Router.Post("/add-user", u.addUser)
+	u.Router.Get("/get-users", u.getUsers)
 }
 
-func (u *UserController) addUser(response http.ResponseWriter, request *http.Request) {
+func (u *UserController) addUser(res http.ResponseWriter, req *http.Request) {
+	if err := req.ParseForm(); err != nil {
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}	
+
+	name := req.FormValue("name")
+
+	fmt.Println("name:", name)
+
+	userResult := u.userService.AddUser(name)
+
+	fmt.Println("user:", userResult.ResultData)
+
+	// u.templates.ExecuteTemplate(res, "user", )
+
+	res.WriteHeader(http.StatusOK)
+}
+
+func (u *UserController) getUsers(res http.ResponseWriter, req *http.Request) {
 	
 }

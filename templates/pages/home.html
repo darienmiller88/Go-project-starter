@@ -11,19 +11,30 @@
         <img src="/static/img/Htmx_Logo.png" alt="htmx-logo">
     </div>
     
-    <div class="button-wrapper">
-        <input type="text" placeholder="Add User">
-        <button hx-post="/add-user" hx-target="#users" hx-swap="beforeend">
+    <form 
+        class="button-wrapper" 
+        hx-post="/users/add-user" 
+        hx-target="#users"
+        hx-swap="beforeend" 
+        hx-on::after-request="if(event.detail.successful) this.reset()"
+    >
+        <input type="text" placeholder="Add User" name="name">
+        <button type="submit">
             Add
         </button>
-    </div>
+    </form>
 
     <h4>Users</h4>
+
+    {{ if .Users }}
     <div id="users" class="users">
-        <div class="user">Darien</div>
-        <div class="user">Miller</div>
-        <div class="user">Vicky</div>
+        {{ range .Users }}
+            <div class="user" id="{{ .ID }}">{{ .Name }}</div>
+        {{ end }}
     </div>
+    {{ else }}
+    <div class="no-users">No users found</div>
+    {{ end }}
 {{ end }}
 
 <!-- "Inherits" the base.html -->

@@ -6,7 +6,7 @@ const (
 
 	DeleteUser string = "DELETE FROM users WHERE id = $1"
 
-	AddUser string = "INSERT INTO users (name) VALUES ($1)"
+	AddUser string = "INSERT INTO users (name) VALUES ($1) RETURNING id"
 
 	UpdateUser string = ""
 )
