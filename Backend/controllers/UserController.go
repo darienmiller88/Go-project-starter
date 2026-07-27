@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"GoProjectStarter/Backend/services"
-	"fmt"
 	"html/template"
 	"net/http"
 
@@ -10,8 +9,8 @@ import (
 )
 
 type UserController struct {
-	Router     *chi.Mux
-	templates  *template.Template
+	Router      *chi.Mux
+	templates   *template.Template
 	userService services.UserService
 }
 
@@ -21,7 +20,7 @@ func NewUserController(userService services.UserService) *UserController {
 		Router:      chi.NewRouter(),
 		userService: userService,
 		templates:   template.Must(template.ParseGlob("./templates/partials/*.html")),
-	} 
+	}
 
 	uc.registerViewRoutes()
 
@@ -37,21 +36,21 @@ func (u *UserController) addUser(res http.ResponseWriter, req *http.Request) {
 	if err := req.ParseForm(); err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 		return
-	}	
+	}
 
 	name := req.FormValue("name")
-
-	fmt.Println("name:", name)
-
 	userResult := u.userService.AddUser(name)
 
-	fmt.Println("user:", userResult.ResultData)
+	if userResult.Err != nil {
+		http.Error(res, userResult.Err.Error(), userResult.StatusCode)
+		return
+	}
 
-	// u.templates.ExecuteTemplate(res, "user", )
-
-	res.WriteHeader(http.StatusOK)
+	if err := u.templates.ExecuteTemplate(res, "user", userResult.ResultData); err != nil {
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func (u *UserController) getUsers(res http.ResponseWriter, req *http.Request) {
-	
+
 }
