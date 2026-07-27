@@ -10,14 +10,20 @@
         <span>+</span>
         <img src="/static/img/Htmx_Logo.png" alt="htmx-logo">
     </div>
-    <h4>Users</h4>
-    <button hx-post="/add-user" hx-target="#users" hx-swap="beforeend">
-        Add
-        <!-- Htmx counter will go here -->
-        <span></span>
-    </button>
-    <div id="users" class="users">
+    
+    <div class="button-wrapper">
+        <input type="text" placeholder="Add User">
+        <button hx-post="/add-user" hx-target="#users" hx-swap="beforeend">
+            Add
+            <span></span>
+        </button>
+    </div>
 
+    <h4>Users</h4>
+    <div id="users" class="users">
+        <div class="user">Darien</div>
+        <div class="user">Miller</div>
+        <div class="user">Vicky</div>
     </div>
 {{ end }}
 
