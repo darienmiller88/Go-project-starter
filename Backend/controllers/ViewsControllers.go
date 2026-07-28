@@ -48,7 +48,7 @@ func (v *ViewsController) homePage(response http.ResponseWriter, request *http.R
 	}
 
 	users := usersResult.ResultData
-	data := map[string]any{
+	data  := map[string]any{
 		"Users": users,
 	}
 
